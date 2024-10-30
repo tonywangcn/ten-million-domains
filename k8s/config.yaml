@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: worker-env
+data:
+  ENV: PROD
+  REDIS_HOST: redis-cluster.redis.svc.cluster.local
+  REDIS_PORT: "26379"
+  REDIS_PASSWORD: "HZOiBwJJsg3y"

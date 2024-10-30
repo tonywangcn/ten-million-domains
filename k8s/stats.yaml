@@ -1,0 +1,27 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: stats-job
+spec:
+  template:
+    metadata:
+      labels:
+        app: stats-job
+    spec:
+      containers:
+        - name: stats-job
+          image: ghcr.io/tonywangcn/ten-million-domains:20241028150232
+          envFrom:
+            - configMapRef:
+                name: worker-env
+          command: ["./main", "-w", "stats"]
+          resources:
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+      restartPolicy: Never
+  backoffLimit: 4

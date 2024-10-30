@@ -1,0 +1,12 @@
+*.tfvars
+vendor
+*.csv
+.terraform
+*.hcl
+*.tfstate
+kubeconfig*
+*.backup
+.venv
+.env
+cloudflared.yaml
+secret.yaml

@@ -1,0 +1,27 @@
+architecture: replication
+
+auth:
+  enabled: true
+  password: "HZOiBwJJsg3y"
+
+replica:
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+    limits:
+      cpu: "3"
+      memory: "8Gi"
+  replicaCount: 3
+  disableCommands: []
+
+sentinel:
+  enabled: true
+  redisShutdownWaitFailover: true
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+    limits:
+      cpu: "3"
+      memory: "8Gi"

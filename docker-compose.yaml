@@ -1,0 +1,37 @@
+version: "3.5"
+services:
+  worker:
+    image: ghcr.io/tonywangcn/ten-million-domains:latest
+    container_name: worker
+    env_file:
+      - .env
+    working_dir: /app
+    # command: ["sh", "-c", "while true; do sleep 3600; done"]
+    command: ./main -w worker -c 2
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "3"
+
+  load-job:
+    image: ghcr.io/tonywangcn/ten-million-domains:latest
+    container_name: load-job
+    env_file:
+      - .env
+    working_dir: /app
+    command: ./main -w job
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "3"
+
+  redis:
+    container_name: redis
+    image: "redis"
+    ports:
+      - 6379:6379
+    command: redis-server
+    restart: always

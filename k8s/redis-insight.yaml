@@ -1,0 +1,59 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redisinsight-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi # Adjust the size as needed
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redisinsight
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redisinsight
+  template:
+    metadata:
+      labels:
+        app: redisinsight
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: redisinsight
+          image: redis/redisinsight:2.56
+          ports:
+            - containerPort: 5540
+          volumeMounts:
+            - name: redisinsight-data
+              mountPath: /data # Adjust the path based on RedisInsight's data directory
+          resources:
+            requests:
+              cpu: "500m"
+              memory: 500Mi
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+      volumes:
+        - name: redisinsight-data
+          persistentVolumeClaim:
+            claimName: redisinsight-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redisinsight
+spec:
+  ports:
+    - port: 5540
+      targetPort: 5540
+  selector:
+    app: redisinsight

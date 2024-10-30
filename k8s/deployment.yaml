@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  replicas: 400
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+        - name: worker
+          image: ghcr.io/tonywangcn/ten-million-domains:20241028150232
+          envFrom:
+            - configMapRef:
+                name: worker-env
+          command: ["./main", "-w", "worker", "-c", "200"]
+          resources:
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+            requests:
+              memory: "300Mi"
+              cpu: "300m"
